@@ -1,0 +1,16 @@
+network:
+    localhost: #192.168.13.78  
+etcdmgr:
+    path: /tmp/unix_socketRF
+etcd:
+    clientport:  1379
+    peerport:  1380
+    capacity:  7
+    identity:  creator #creator | peer
+    clustermembers:  192.168.13.223:1379
+log:
+    type: date #date | size
+    maxdays: 7 #for type: date
+    maxfiles:  5 #for type: size 
+    maxsize: 1048576 #for type: size && the size per file && the unit is byte
+    level: 'warn,error,critical' #'debug,info,warn,error,critical

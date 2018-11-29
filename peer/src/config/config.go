@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const cmdRoot = "config" //config.yaml
+const cmdRoot = "peer" //config.yaml
 var BasePath string
 
 func Initialize() error {
