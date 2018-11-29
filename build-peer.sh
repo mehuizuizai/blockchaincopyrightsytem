@@ -3,9 +3,9 @@ this_dir=`pwd`
 mkdir Peer/
 
 chmod 777 Peer
-cp -r peer/src/config.yaml Peer/
+cp -r peer/src/peer.yaml Peer/
 
-export GOPATH=$this_dir:$this_dir/peer/:$this_dir/peer/src/vendor/
+export GOPATH=$this_dir:$this_dir/peer/:$this_dir/vendor/
 export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin
 
 

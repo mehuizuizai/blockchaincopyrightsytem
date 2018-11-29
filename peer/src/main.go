@@ -1,6 +1,7 @@
 package main
 
 import (
+	"common/etcd"
 	"config"
 	"logging"
 	"web"
@@ -9,5 +10,7 @@ import (
 func main() {
 	config.Initialize()
 	logging.Initialize()
+	etcd.Initialize()
+
 	web.Initialize()
 }

@@ -9,7 +9,6 @@ import (
 )
 
 var logger = logging.MustGetLogger()
-var verifyFlag bool
 
 const (
 	LABEL_CALLER    = "Caller"
