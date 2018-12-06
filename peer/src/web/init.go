@@ -10,11 +10,6 @@ import (
 
 var logger = logging.MustGetLogger()
 
-const (
-	LABEL_CALLER    = "Caller"
-	LABEL_SIGNATURE = "Signature"
-)
-
 func verifyHandler(mapData *map[string]string) error {
 	return nil
 }
