@@ -2,6 +2,7 @@ package restapi
 
 import (
 	"net/http"
+	"txmgr"
 	"web/framework"
 )
 
@@ -24,7 +25,17 @@ var copyrightTxAPI = &framework.RESTConfig{
 }
 
 func copyrightTxHandleFn(req *framework.RESTRequest) (int, interface{}, error) {
-	//body := req.Body.(*CopyrightTxReq)
+	body := req.Body.(*CopyrightTxReq)
 
-	return http.StatusOK, nil, nil
+	err := txmgr.CopyrightTxHandler(body.WorkId, body.From, body.To)
+	resp := &CopyrightTxRes{}
+	if err != nil {
+		resp.Result = false
+		resp.ErrorInfo = "error"
+		return http.StatusOK, resp, nil
+	}
+
+	resp.Result = true
+	resp.ErrorInfo = ""
+	return http.StatusOK, resp, nil
 }
