@@ -1,5 +1,9 @@
 package datastruct
 
+import (
+	"time"
+)
+
 type Event struct {
 	Action    string      `json:"action"`
 	Node      *NodeExtern `json:"node,omitempty"`

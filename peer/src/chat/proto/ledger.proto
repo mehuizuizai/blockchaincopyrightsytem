@@ -1,0 +1,25 @@
+syntax = "proto3";
+package proto;
+
+// Get blocks
+message BlocksRequest {
+    int BlocksNnum = 0;
+}
+
+message BlocksResponse {
+    bytes paload = 0;
+}
+
+message BlockHeightRequest {
+}
+
+message BlockHeightResponse {
+	int BlockHeight = 0;
+}
+
+message TxPoolRequest {
+}
+
+message TxPoolResponse {
+	bytes payload = 0;
+}

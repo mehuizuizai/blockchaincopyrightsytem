@@ -157,7 +157,32 @@ func GetEtcdMgrPath() string {
 	return path
 }
 
-func GetVerifyFlag() bool {
-	flag := viper.GetBool("webservice.verifyflag")
-	return flag
+func GetChatPort() string {
+	port := viper.GetString("chat.port")
+	if port == "" {
+		port = "9494"
+	}
+	return port
+}
+
+const DEFAULT_CHAT_TIMEOUT uint = 10
+const DEFAULT_CHAT_CONCURRENT uint32 = 2000
+const DEFAULT_CHAT_CONNWINDOWSIZE uint = 10
+const DEFAULT_CHAT_WRITEBUFSIZE uint32 = 512
+
+func GetChatTimeout() uint {
+	timeout := DEFAULT_CHAT_TIMEOUT
+	return timeout
+}
+
+func GetChatConcurrent() uint32 {
+	return DEFAULT_CHAT_CONCURRENT
+}
+
+func GetChatConnWindowSize() uint {
+	return DEFAULT_CHAT_CONNWINDOWSIZE
+}
+
+func GetChatWriteBufferSize() uint32 {
+	return DEFAULT_CHAT_WRITEBUFSIZE
 }
