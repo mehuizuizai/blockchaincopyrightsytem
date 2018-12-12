@@ -1,0 +1,25 @@
+syntax = "proto3";
+package proto;
+
+// 通信请求体
+message Request {
+    enum Type {
+		CONSENSUS = 0;		
+    }
+    Type type = 1;
+    bytes payload = 2;
+}
+
+// 通信响应体
+message Response {
+    enum Type {
+		CONSENSUS = 0;		
+    }
+    Type type = 1;
+    bytes payload = 2;
+}
+
+service Peer {
+	// 封装rpc
+	rpc Chat(Request) returns (Response) {}
+}

@@ -5,6 +5,8 @@ webservice:
     conns: 900
 etcdmgr:
     path: /tmp/unix_socketRF
+chat:
+    port: 9090
 log:
     type: date #date | size
     maxdays: 7 #for type: date
