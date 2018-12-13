@@ -186,3 +186,13 @@ func GetChatConnWindowSize() uint {
 func GetChatWriteBufferSize() uint32 {
 	return DEFAULT_CHAT_WRITEBUFSIZE
 }
+
+func GetPeers() []string {
+	var peers []string
+	peersString := viper.GetString("peers")
+	if peersString == "" {
+		return nil
+	}
+	peers = strings.Split(peersString, "-")
+	return peers
+}

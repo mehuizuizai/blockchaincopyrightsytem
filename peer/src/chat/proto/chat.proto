@@ -7,7 +7,8 @@ message Request {
 		CONSENSUS = 0;
 		FETCH_BLOCKS = 1;
 		FETCH_BLOCKHEIGHT = 2;
-		FETCH_TXPOOL = 3;		
+		FETCH_TXPOOL = 3;
+		COPYRIGHT_TX = 4;		
     }
     Type type = 1;
     bytes payload = 2;
@@ -20,6 +21,7 @@ message Response {
 		FETCH_BLOCKS = 1;	
 		FETCH_BLOCKHEIGHT = 2;
 		FETCH_TXPOOL = 3;
+		COPYRIGHT_TX = 4;
     }
     Type type = 1;
     bytes payload = 2;

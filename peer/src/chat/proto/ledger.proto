@@ -3,23 +3,23 @@ package proto;
 
 // Get blocks
 message BlocksRequest {
-    int BlocksNnum = 0;
+    uint64 BlocksNnum = 1;
 }
 
 message BlocksResponse {
-    bytes paload = 0;
+    bytes Payload = 1;
 }
 
 message BlockHeightRequest {
 }
 
 message BlockHeightResponse {
-	int BlockHeight = 0;
+	uint64 BlockHeight = 1;
 }
 
 message TxPoolRequest {
 }
 
 message TxPoolResponse {
-	bytes payload = 0;
+	bytes payload = 1;
 }

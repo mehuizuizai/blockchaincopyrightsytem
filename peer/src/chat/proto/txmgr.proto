@@ -1,0 +1,14 @@
+syntax = "proto3";
+package proto;
+
+//transaction request body.
+message CopyrightTxRequest {
+	string SessionID = 1;
+    string WorkID = 2;
+	string From = 3;
+	string To = 4;
+}
+
+//transaction response body.
+message CopyrightTxResponse {
+}

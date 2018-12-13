@@ -1,0 +1,13 @@
+syntax = "proto3";
+package proto;
+
+// consensus request body
+message ConsensusRequest {
+    string SessionID = 1;
+	string IP = 2;
+	bytes Vote = 3;
+}
+
+// consensus response body
+message ConsensusResponse {
+}
