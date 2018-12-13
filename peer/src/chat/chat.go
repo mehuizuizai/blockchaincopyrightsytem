@@ -113,6 +113,18 @@ func RegisterMsg(reqMsgType pb.Request_Type, handler Handler, respMsgType pb.Res
 	case pb.Request_CONSENSUS:
 	//		request = pb.ConsensusRequest{}
 	//		response = pb.ConsensusResponse{}
+	case pb.Request_COPYRIGHT_TX:
+		request = pb.CopyrightTxRequest{}
+		response = pb.CopyrightTxResponse{}
+	case pb.Request_FETCH_BLOCKHEIGHT:
+		request = pb.BlockHeightRequest{}
+		response = pb.BlockHeightResponse{}
+	case pb.Request_FETCH_BLOCKS:
+		request = pb.BlocksRequest{}
+		response = pb.BlocksResponse{}
+	case pb.Request_FETCH_TXPOOL:
+		request = pb.TxPoolRequest{}
+		response = pb.TxPoolResponse{}
 
 	//...
 	default:
@@ -128,6 +140,7 @@ func RegisterMsg(reqMsgType pb.Request_Type, handler Handler, respMsgType pb.Res
 
 	//expand response msg map
 	respMsgMap[respMsgType] = reflect.TypeOf(response)
+
 }
 
 func SendMsg(msgType pb.Request_Type, arg interface{}, address string) (interface{}, error) {
