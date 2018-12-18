@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func GetlocalIP() (string, error) {
+func GetlocalIP() string {
 	inDocker := false
 
 	addrs, err := net.InterfaceAddrs()
@@ -28,26 +28,26 @@ func GetlocalIP() (string, error) {
 	}
 
 	if len(IPs) == 1 {
-		return IPs[0], nil
+		return IPs[0]
 	} else if len(IPs) == 0 {
-		return "", fmt.Errorf("Error in getting local ip")
+		return ""
 	} else if len(IPs) == 2 { //commonly in docker
 		for _, value := range IPs {
 			if !strings.Contains(value, "172.17") {
-				return value, nil
+				return value
 			}
 		}
-		return "", fmt.Errorf("Error in getting local ip")
+		return ""
 	} else if inDocker == false { //commomly in real machine
 		//===========temp============
 		for _, value := range IPs {
 			if !strings.Contains(value, "172") {
-				return value, nil
+				return value
 			}
 		}
-		return "", fmt.Errorf("Error in getting local ip")
+		return ""
 		//===========temp============
 	} else {
-		return "", fmt.Errorf("Error in getting local ip, got more than one ip, as flow:", IPs)
+		return ""
 	}
 }

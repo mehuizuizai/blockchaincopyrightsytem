@@ -3,7 +3,7 @@ package proto;
 
 // Get blocks
 message BlocksRequest {
-    uint64 BlocksNnum = 1;
+    uint64 BlocksNum = 1;
 }
 
 message BlocksResponse {
