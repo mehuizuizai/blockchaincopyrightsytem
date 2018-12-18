@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"chat"
 	pb "chat/proto"
+	"common/utils"
 	"config"
 	"fmt"
 	"logging"
@@ -14,20 +15,26 @@ import (
 
 var logger = logging.MustGetLogger()
 
-var sessionMap map[string]map[string][]byte = make(map[string]map[string][]byte)
+var conSessionMap map[string]map[string][]byte = make(map[string]map[string][]byte)
+
+//type oneSession struct {
+//	votes map[string][]byte
+//	time.Timer
+//}
 
 func Initialize() {
 	//register consensus request callback function.
-	chat.RegisterMsg(pb.Request_CONSENSUS, consensusHandler, pb.Response_CONSENSUS)
+	chat.RegisterMsg(pb.Request_CONSENSUS, consensusCallback, pb.Response_CONSENSUS)
 }
 
-func StartConsensus(selfVote []byte, selfIP, sessionID string) (bool, bool, []string) {
+func StartConsensus(selfVote []byte, sessionID string) (bool, bool, []string) {
 	//put myself vote into session map.
-	_, ok := sessionMap[sessionID]
+	_, ok := conSessionMap[sessionID]
 	if !ok {
-		sessionMap[sessionID] = make(map[string][]byte)
+		conSessionMap[sessionID] = make(map[string][]byte)
 	}
-	sessionMap[sessionID][selfIP] = selfVote
+	selfIP := utils.GetlocalIP()
+	conSessionMap[sessionID][selfIP] = selfVote
 
 	//broadcast my vote to other peer.
 	broadcastMyVote(selfVote, selfIP, sessionID)
@@ -38,20 +45,20 @@ func StartConsensus(selfVote []byte, selfIP, sessionID string) (bool, bool, []st
 
 }
 
-func consensusHandler(args interface{}) (pb.Response_Type, interface{}, error) {
+func consensusCallback(args interface{}) (pb.Response_Type, interface{}, error) {
 	reqMsg, ok := args.(pb.ConsensusRequest)
 	if !ok {
 		logger.Error("assert error...")
-		return pb.Response_CONSENSUS, nil, fmt.Errorf("handle copyright tx msg error")
+		return pb.Response_CONSENSUS, pb.ConsensusResponse{}, fmt.Errorf("handle consensus msg error")
 	}
 	//put consensus session content into session map.
-	_, ok = sessionMap[reqMsg.SessionID]
+	_, ok = conSessionMap[reqMsg.SessionID]
 	if !ok {
-		sessionMap[reqMsg.SessionID] = make(map[string][]byte)
+		conSessionMap[reqMsg.SessionID] = make(map[string][]byte)
 	}
-	sessionMap[reqMsg.SessionID][reqMsg.IP] = reqMsg.Vote
+	conSessionMap[reqMsg.SessionID][reqMsg.IP] = reqMsg.Vote
 
-	return pb.Response_CONSENSUS, nil, nil
+	return pb.Response_CONSENSUS, pb.ConsensusResponse{}, nil
 }
 
 func broadcastMyVote(selfVote []byte, selfIP, sessionID string) {
@@ -67,7 +74,7 @@ func broadcastMyVote(selfVote []byte, selfIP, sessionID string) {
 	peersNotMe := append(peers[:indexOfMe], peers[indexOfMe+1:]...)
 
 	//loop send msg
-	args := pb.ConsensusRequest{
+	args := &pb.ConsensusRequest{
 		SessionID: sessionID,
 		IP:        selfIP,
 		Vote:      selfVote,
@@ -80,12 +87,12 @@ func broadcastMyVote(selfVote []byte, selfIP, sessionID string) {
 func doVote(sessionID string) (isSuccessful bool, mostVote []byte, mostPeers []string) {
 	var peersVotes map[string][]byte
 	allPeers := config.GetPeers()
-	for i := 3; i > 0; i-- {
-		peersVotes = sessionMap[sessionID]
+	for i := 5; i > 0; i-- {
+		peersVotes = conSessionMap[sessionID]
 		if len((peersVotes)) == len(allPeers) {
 			break
 		}
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 	}
 
 	//if mostPeers num is bigger than or equal to votingThreshold, then consensus successfully.

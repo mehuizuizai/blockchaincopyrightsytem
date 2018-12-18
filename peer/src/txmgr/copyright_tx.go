@@ -3,7 +3,6 @@ package txmgr
 import (
 	"chat"
 	pb "chat/proto"
-	"common/utils"
 	"consensus"
 	"crypto/sha256"
 	"fmt"
@@ -17,20 +16,14 @@ type copyrightTx struct {
 	To     string
 }
 
-var sessionMap map[string]copyrightTx = make(map[string]copyrightTx)
+//var txSessionMap map[string]copyrightTx = make(map[string]copyrightTx)
 
 func CopyrightTxHandler(workId, from, to string) error {
 	//put session content into cache.
 	sessionID := strconv.FormatInt(time.Now().UnixNano(), 16)
-	tx := copyrightTx{
-		WorkID: workId,
-		From:   from,
-		To:     to,
-	}
-	sessionMap[sessionID] = tx
 
 	//broacast tx request.
-	args := pb.CopyrightTxRequest{
+	args := &pb.CopyrightTxRequest{
 		SessionID: sessionID,
 		WorkID:    workId,
 		From:      from,
@@ -42,15 +35,32 @@ func CopyrightTxHandler(workId, from, to string) error {
 		return fmt.Errorf("Send message error")
 	}
 
+	err = copyrightTxHandler(workId, from, to, sessionID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func copyrightTxHandler(workId, from, to, sessionID string) error {
+	tx := copyrightTx{
+		WorkID: workId,
+		From:   from,
+		To:     to,
+	}
+	txsession.Lock()
+	txsession.txSessionMap[sessionID] = tx
+	txsession.Unlock()
+
 	//TODO call preexecution interface, and the return value type is []byte.
+
+	//trigger consensus
 	//for test
 	h := sha256.New()
 	h.Write([]byte("hello"))
 	selfVote := h.Sum(nil)
-
-	//trigger consensus
-	selfIP, _ := utils.GetlocalIP()
-	isSuccessful, isEqual, _ := consensus.StartConsensus(selfVote, selfIP, sessionID)
+	isSuccessful, isEqual, _ := consensus.StartConsensus(selfVote, sessionID)
 	if !isSuccessful {
 		logger.Warning("consensus failed...")
 		return fmt.Errorf("transaction is not successful")
@@ -63,28 +73,20 @@ func CopyrightTxHandler(workId, from, to string) error {
 	}
 
 	//TODO decide whether update db really or synce according consensus result.
+
 	return nil
 }
 
 //callback fuction, it handles copyright tx request from other peer.
-func copyrightTxHandler(args interface{}) (pb.Response_Type, interface{}, error) {
+func copyrightTxCallback(args interface{}) (pb.Response_Type, interface{}, error) {
 	resMsg, ok := args.(pb.CopyrightTxRequest)
 	if !ok {
 		logger.Error("assert error...")
-		return pb.Response_COPYRIGHT_TX, nil, fmt.Errorf("handle copyright tx msg error")
+		return pb.Response_COPYRIGHT_TX, pb.CopyrightTxResponse{}, fmt.Errorf("handle copyright tx msg error")
 	}
 
-	//put tx request into session map.
-	sessionMap[resMsg.SessionID] = copyrightTx{
-		WorkID: resMsg.WorkID,
-		From:   resMsg.From,
-		To:     resMsg.To,
-	}
-
-	//TODO call preexecution interface, and the return value type is []byte.
-
-	//TODO trigger consensus
+	go copyrightTxHandler(resMsg.WorkID, resMsg.From, resMsg.To, resMsg.SessionID)
 
 	//TODO decide whether update db really or synce according consensus result.
-	return pb.Response_COPYRIGHT_TX, nil, nil
+	return pb.Response_COPYRIGHT_TX, pb.CopyrightTxResponse{}, nil
 }

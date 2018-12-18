@@ -16,7 +16,7 @@ func verifyHandler(mapData *map[string]string) error {
 
 func Initialize() {
 
-	ip, _ := utils.GetlocalIP()
+	ip := utils.GetlocalIP()
 
 	port := config.GetWebServPort()
 	addr := ip + ":" + port
