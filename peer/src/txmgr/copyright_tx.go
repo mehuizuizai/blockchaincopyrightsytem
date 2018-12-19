@@ -72,6 +72,7 @@ func copyrightTxHandler(workId, from, to, sessionID string) error {
 	//create tx id.
 	txID := createID(time.Now())
 	//TODO update db really.
+	DbService.TranCopyright(from, to, workId, time.Now(), txID)
 
 	return nil
 }

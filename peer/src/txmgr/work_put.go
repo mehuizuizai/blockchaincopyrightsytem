@@ -4,8 +4,8 @@ import (
 	"chat"
 	pb "chat/proto"
 	"consensus"
-	"crypto/sha256"
 	"errors"
+	"ledger/DbService"
 	"math/rand"
 	"strconv"
 	"time"
@@ -66,13 +66,9 @@ func workPutHandler(workName, owner, admin, timestamp, sessionID string) error {
 	txsession.txSessionMap[sessionID] = tx
 	txsession.Unlock()
 
-	//TODO call preexecution interface, and the return value type is []byte.
-
+	//TODO call preexecution interface, and the return value type is []byte
+	selfVote := DbService.WorkEntry_PreExe(workID, workName, owner, admin, time.Now(), "")
 	//trigger consensus
-	//for test==========================to be deleted
-	h := sha256.New()
-	h.Write([]byte("hello"))
-	selfVote := h.Sum(nil)
 	isSuccessful, isEqual, _ := consensus.StartConsensus(selfVote, sessionID)
 	if !isSuccessful {
 		logger.Warning("consensus failed...")
@@ -85,7 +81,10 @@ func workPutHandler(workName, owner, admin, timestamp, sessionID string) error {
 		return nil
 	}
 
+	//create tx id.
+	txID := createID(time.Now())
 	//TODO decide whether update db really or synce according consensus result.
+	DbService.WorkEntry(workID, workName, owner, admin, time.Now(), txID)
 	return nil
 }
 
