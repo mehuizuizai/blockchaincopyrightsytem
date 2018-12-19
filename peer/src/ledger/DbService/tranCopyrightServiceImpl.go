@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TranCopyright_PreExe(from_Name string, to_Name string, workId string, timeNow time.Time, txid string) string {
+func TranCopyright_PreExe(from_Name string, to_Name string, workId string, timeNow time.Time, txid string) []byte {
 	result := UpdateWorkOwner_PreExe(from_Name, to_Name, workId)
 	return result
 }

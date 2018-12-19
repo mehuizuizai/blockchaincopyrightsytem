@@ -5,7 +5,7 @@ import (
 	"ledger/DbUtil"
 	"log"
 
-	"ledger/github.com/boltdb/bolt"
+	"github.com/boltdb/bolt"
 )
 
 const dbFile = "blockchain2.db"

@@ -7,7 +7,7 @@ import (
 	"ledger/DbUtil"
 	"log"
 
-	_ "ledger/github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func QueryForMap(sql string, args ...interface{}) (map[string]string, error) { // how to []map -> map
