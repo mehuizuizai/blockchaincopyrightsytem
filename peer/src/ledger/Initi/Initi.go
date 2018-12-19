@@ -5,19 +5,21 @@ import (
 	//	"database/sql"
 	//	"fmt"
 	"ledger/DbDao"
+	"ledger/DbService"
 	"ledger/DbUtil"
-	//    "ledger/DbService"
-	_ "ledger/github.com/go-sql-driver/mysql"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
-func Init() {
-	//	Create_Db_blockchain()
-	//	Create_Table_Admin()
-	//	Create_Table_User()
-	//	Create_Table_Tx()
-	//	Create_Table_Work()
-	//	DbDao.NewBlockchain()
-	//	DbService.TimingBlockInit()
+func Initialize() {
+	Create_Db_blockchain()
+	Create_Table_Admin()
+	Create_Table_User()
+	Create_Table_Tx()
+	Create_Table_Work()
+	Insert_Table_Admin()
+	DbDao.NewBlockchain()
+	DbService.TimingBlockInit()
 	Insert_Table_Admin()
 }
 func Create_Db_blockchain() {

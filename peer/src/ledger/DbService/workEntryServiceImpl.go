@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func WorkEntry_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time, txId string) string {
+func WorkEntry_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time, txId string) []byte {
 
 	result := InsertWorkEntry_PreExe(workID, workName, ownerName, adminName, timeNow)
 	return result

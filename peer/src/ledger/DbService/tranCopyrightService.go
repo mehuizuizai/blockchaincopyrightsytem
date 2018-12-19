@@ -28,7 +28,7 @@ func UpdateWorkOwner(from_Name, to_Name, WorkID string, txid string) (int, int, 
 	}
 	return 0, 0, false, err
 }
-func UpdateWorkOwner_PreExe(from_Name, to_Name, WorkID string) string {
+func UpdateWorkOwner_PreExe(from_Name, to_Name, WorkID string) []byte {
 	workInfo := make([]string, 0)
 	//-------------
 	queryResult1, _ := DbDao.QueryForMap("SELECT tb_User.userID  from tb_User  where tb_User.username =?", from_Name)
@@ -65,7 +65,7 @@ func createTxhash(from_Name string, to_Name string, workId string, timeNow time.
 	txInfo = append(txInfo, to_Name)
 	txInfo = append(txInfo, workId)
 	txInfo = append(txInfo, timeNow.String())
-	txHash := DbUtil.Str_Sha256(txInfo)
+	txHash := DbUtil.Str_Sha256_String(txInfo)
 	return txHash
 }
 

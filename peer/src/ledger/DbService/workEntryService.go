@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func InsertWorkEntry_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time) string {
+func InsertWorkEntry_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time) []byte {
 	//admin  WorkEntry admin
 	// return  two bool ?
 	result := InsertWork_PreExe(workID, workName, ownerName, adminName, timeNow)
@@ -26,7 +26,7 @@ func InsertWorkEntry(workID string, workName string, ownerName string, adminName
 	return result, err
 }
 
-func InsertWork_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time) string {
+func InsertWork_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time) []byte {
 	workInfo := make([]string, 0)
 	//--- ounername  ,admin name
 	queryResult, _ := DbDao.QueryForMap("SELECT tb_User.userID , tb_Admin.adminID  from tb_User ,tb_Admin where tb_User.username =? and tb_Admin.username =?", ownerName, adminName)
