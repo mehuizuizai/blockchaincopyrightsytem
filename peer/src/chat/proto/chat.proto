@@ -8,7 +8,8 @@ message Request {
 		FETCH_BLOCKS = 1;
 		FETCH_BLOCKHEIGHT = 2;
 		FETCH_TXPOOL = 3;
-		COPYRIGHT_TX = 4;		
+		COPYRIGHT_TX = 4;
+		WORK_PUT = 5;		
     }
     Type type = 1;
     bytes payload = 2;
@@ -22,6 +23,7 @@ message Response {
 		FETCH_BLOCKHEIGHT = 2;
 		FETCH_TXPOOL = 3;
 		COPYRIGHT_TX = 4;
+		WORK_PUT = 5;
     }
     Type type = 1;
     bytes payload = 2;

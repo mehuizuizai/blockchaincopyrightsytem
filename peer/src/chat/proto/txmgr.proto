@@ -12,3 +12,16 @@ message CopyrightTxRequest {
 //transaction response body.
 message CopyrightTxResponse {
 }
+
+//transaction request body.
+message WorkPutTxRequest {
+	string SessionID = 1;
+    string WorkName = 2;
+	string Owner = 3;
+	string Admin = 4;
+	string Timestamp = 5;
+}
+
+//transaction response body.
+message WorkPutTxResponse {
+}
