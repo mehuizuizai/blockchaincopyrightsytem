@@ -1,7 +1,7 @@
 package DbService
 
 import (
-	"DbDao"
+	"ledger/DbDao"
 )
 
 func QueryWork(workname1 string) (workId string, workname string, owner string, phoneNumber string, admin string, time string) {

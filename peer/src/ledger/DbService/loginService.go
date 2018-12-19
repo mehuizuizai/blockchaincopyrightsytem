@@ -1,7 +1,7 @@
 package DbService
 
 import (
-	"DbDao"
+	"ledger/DbDao"
 )
 
 func QueryLogin(username string, password string, flag int) (map[string]string, bool, error) {
