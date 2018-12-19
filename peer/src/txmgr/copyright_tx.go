@@ -4,8 +4,8 @@ import (
 	"chat"
 	pb "chat/proto"
 	"consensus"
-	"crypto/sha256"
 	"errors"
+	"ledger/DbService"
 	"strconv"
 	"time"
 )
@@ -53,13 +53,10 @@ func copyrightTxHandler(workId, from, to, sessionID string) error {
 	txsession.txSessionMap[sessionID] = tx
 	txsession.Unlock()
 
-	//TODO call preexecution interface, and the return value type is []byte.
-
+	//TODO call preexecution interface, and the return value type is []byte
+	selfVote := DbService.TranCopyright_PreExe(from, to, workId, time.Now(), "")
 	//trigger consensus
-	//for test==========================to be deleted
-	h := sha256.New()
-	h.Write([]byte("hello"))
-	selfVote := h.Sum(nil)
+
 	isSuccessful, isEqual, _ := consensus.StartConsensus(selfVote, sessionID)
 	if !isSuccessful {
 		logger.Warning("consensus failed...")
@@ -72,7 +69,10 @@ func copyrightTxHandler(workId, from, to, sessionID string) error {
 		return nil
 	}
 
-	//TODO decide whether update db really or synce according consensus result.
+	//create tx id.
+	txID := createID(time.Now())
+	//TODO update db really.
+	DbService.TranCopyright(from, to, workId, time.Now(), txID)
 
 	return nil
 }
