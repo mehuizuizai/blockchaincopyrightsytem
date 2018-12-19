@@ -5,7 +5,7 @@ import (
 	pb "chat/proto"
 	"consensus"
 	"crypto/sha256"
-	"fmt"
+	"errors"
 	"strconv"
 	"time"
 )
@@ -19,7 +19,7 @@ type copyrightTx struct {
 //var txSessionMap map[string]copyrightTx = make(map[string]copyrightTx)
 
 func CopyrightTxHandler(workId, from, to string) error {
-	//put session content into cache.
+	//create a session for this tx.
 	sessionID := strconv.FormatInt(time.Now().UnixNano(), 16)
 
 	//broacast tx request.
@@ -32,7 +32,7 @@ func CopyrightTxHandler(workId, from, to string) error {
 	_, err := chat.SendMsg(pb.Request_COPYRIGHT_TX, args, "192.168.13.82") // there is no need to get response msg.
 	if err != nil {
 		logger.Error("Send message error")
-		return fmt.Errorf("Send message error")
+		return errors.New("Send message error")
 	}
 
 	err = copyrightTxHandler(workId, from, to, sessionID)
@@ -56,14 +56,14 @@ func copyrightTxHandler(workId, from, to, sessionID string) error {
 	//TODO call preexecution interface, and the return value type is []byte.
 
 	//trigger consensus
-	//for test
+	//for test==========================to be deleted
 	h := sha256.New()
 	h.Write([]byte("hello"))
 	selfVote := h.Sum(nil)
 	isSuccessful, isEqual, _ := consensus.StartConsensus(selfVote, sessionID)
 	if !isSuccessful {
 		logger.Warning("consensus failed...")
-		return fmt.Errorf("transaction is not successful")
+		return errors.New("transaction is not successful")
 	}
 
 	if !isEqual {
@@ -82,7 +82,7 @@ func copyrightTxCallback(args interface{}) (pb.Response_Type, interface{}, error
 	resMsg, ok := args.(pb.CopyrightTxRequest)
 	if !ok {
 		logger.Error("assert error...")
-		return pb.Response_COPYRIGHT_TX, pb.CopyrightTxResponse{}, fmt.Errorf("handle copyright tx msg error")
+		return pb.Response_COPYRIGHT_TX, pb.CopyrightTxResponse{}, errors.New("handle copyright tx msg error")
 	}
 
 	go copyrightTxHandler(resMsg.WorkID, resMsg.From, resMsg.To, resMsg.SessionID)

@@ -2,13 +2,15 @@ package restapi
 
 import (
 	"net/http"
+	"txmgr"
 	"web/framework"
 )
 
 type WorkPutReq struct {
-	WorkName string
-	Owner    string
-	Admin    string
+	WorkName  string
+	Owner     string
+	Admin     string
+	Timestamp string
 }
 
 type WorkPutRes struct {
@@ -24,7 +26,19 @@ var workPutAPI = &framework.RESTConfig{
 }
 
 func workPutHandleFn(req *framework.RESTRequest) (int, interface{}, error) {
-	//body := req.Body.(*WorkPutReq)
+	body := req.Body.(*WorkPutReq)
+
+	err := txmgr.WorkPutHandler(body.WorkName, body.Owner, body.Admin, body.Timestamp)
+	resp := &WorkPutRes{}
+	if err != nil {
+		resp.Result = false
+		resp.ErrorInfo = "error"
+		return http.StatusOK, resp, nil
+	}
+
+	resp.Result = true
+	resp.ErrorInfo = ""
+	return http.StatusOK, resp, nil
 
 	return http.StatusOK, nil, nil
 }

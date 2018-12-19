@@ -125,6 +125,9 @@ func RegisterMsg(reqMsgType pb.Request_Type, handler Handler, respMsgType pb.Res
 	case pb.Request_FETCH_TXPOOL:
 		request = pb.TxPoolRequest{}
 		response = pb.TxPoolResponse{}
+	case pb.Request_WORK_PUT:
+		request = pb.WorkPutTxRequest{}
+		response = pb.WorkPutTxResponse{}
 
 	//...
 	default:

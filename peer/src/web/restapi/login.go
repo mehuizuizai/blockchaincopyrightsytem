@@ -2,12 +2,13 @@ package restapi
 
 import (
 	"net/http"
+	"txmgr"
 	"web/framework"
 )
 
 type LoginReq struct {
 	UserName string
-	Password []byte
+	Password string
 	Flag     uint8
 }
 
@@ -24,7 +25,19 @@ var loginAPI = &framework.RESTConfig{
 }
 
 func loginHandleFn(req *framework.RESTRequest) (int, interface{}, error) {
-	//body := req.Body.(*UserRgisterReq)
+	body := req.Body.(*LoginReq)
 
-	return http.StatusOK, nil, nil
+	err := txmgr.LoginHandler(body.UserName, body.Password, body.Flag)
+
+	resp := &LoginRes{}
+	if err != nil {
+		resp.Result = false
+		resp.ErrorInfo = "error"
+		return http.StatusOK, resp, nil
+	}
+
+	resp.Result = true
+	resp.ErrorInfo = ""
+
+	return http.StatusOK, resp, nil
 }

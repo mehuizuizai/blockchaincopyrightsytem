@@ -2,12 +2,13 @@ package restapi
 
 import (
 	"net/http"
+	"txmgr"
 	"web/framework"
 )
 
 type UserRgisterReq struct {
 	UserName    string
-	Password    []byte
+	Password    string
 	IDNumber    string
 	PhoneNumber string
 }
@@ -25,7 +26,19 @@ var userRgisterAPI = &framework.RESTConfig{
 }
 
 func userRegisterHandleFn(req *framework.RESTRequest) (int, interface{}, error) {
-	//body := req.Body.(*UserRgisterReq)
+	body := req.Body.(*UserRgisterReq)
 
-	return http.StatusOK, nil, nil
+	err := txmgr.UserRegisterHandler(body.UserName, body.Password, body.IDNumber, body.PhoneNumber)
+
+	resp := &UserRgisterRes{}
+	if err != nil {
+		resp.Result = false
+		resp.ErrorInfo = "error"
+		return http.StatusOK, resp, nil
+	}
+
+	resp.Result = true
+	resp.ErrorInfo = ""
+
+	return http.StatusOK, resp, nil
 }
