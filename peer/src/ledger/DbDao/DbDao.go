@@ -2,12 +2,12 @@
 package DbDao
 
 import (
-	"DbUtil"
 	"database/sql"
 	"fmt"
+	"ledger/DbUtil"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "ledger/github.com/go-sql-driver/mysql"
 )
 
 func QueryForMap(sql string, args ...interface{}) (map[string]string, error) { // how to []map -> map

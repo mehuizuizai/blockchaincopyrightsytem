@@ -4,10 +4,14 @@ package DbUtil
 import (
 	"database/sql"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "ledger/github.com/go-sql-driver/mysql"
 )
 
+func DbInit() (s *sql.DB, err error) {
+	db, err := sql.Open("mysql", "root:wahaha@tcp(127.0.0.1:3306)/?charset=utf8")
+	return db, err
+}
 func DbOpen() (s *sql.DB, err error) {
-	db, err := sql.Open("mysql", "root:wahaha@tcp(127.0.0.1:3306)/block_chain?charset=utf8")
+	db, err := sql.Open("mysql", "root:wahaha@tcp(127.0.0.1:3306)/blockchain2?charset=utf8")
 	return db, err
 }
