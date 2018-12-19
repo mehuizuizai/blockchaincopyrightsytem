@@ -1,19 +1,22 @@
 package DbService
 
 import (
-	"DbUtil"
 	"fmt"
+	"ledger/DbUtil"
 	"time"
 )
 
-func WorkEntry_PreExe(workID string, workName string, ownerid int, adminid int, timeNow time.Time) string {
+func WorkEntry_PreExe(workID string, workName string, ownerName string, adminName string, timeNow time.Time, txId string) string {
 
-	result := InsertWorkEntry_PreExe(workID, workName, ownerid, adminid, timeNow)
+	result := InsertWorkEntry_PreExe(workID, workName, ownerName, adminName, timeNow)
 	return result
 }
-func WorkEntry(workID string, workName string, ownerid int, adminid int, timeNow time.Time, txId string) bool {
-	txHash := createTxhash(adminid, ownerid, workID, timeNow, txId)
-	result, _ := InsertWorkEntry(workID, workName, ownerid, adminid, timeNow, txId, txHash)
+func WorkEntry(workID string, workName string, ownerName string, adminName string, timeNow time.Time, txId string) bool {
+	txHash := createTxhash(adminName, ownerName, workName, timeNow, txId)
+	result, _ := InsertWorkEntry(workID, workName, ownerName, adminName, timeNow, txId, txHash)
+	if result == false {
+		return result
+	}
 	//
 	postRead := []string{}
 	DbUtil.Load(&postRead, "txhash")

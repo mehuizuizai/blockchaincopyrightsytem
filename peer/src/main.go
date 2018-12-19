@@ -16,7 +16,6 @@ func main() {
 	chat.Initialize()
 	consensus.Initialize()
 	txmgr.Initialize()
-
 	txmgr.CopyrightTxHandler("123456", "Jane", "Jack")
 
 	web.Initialize()
