@@ -53,7 +53,7 @@ func workPutHandler(workName, owner, admin, timestamp, sessionID string) error {
 		return errors.New("timestamp format is error")
 	}
 	//create work id.
-	workID := createWorkID(timestamp_)
+	workID := createID(timestamp_)
 
 	tx := workPut{
 		workID:    workID,
@@ -89,7 +89,7 @@ func workPutHandler(workName, owner, admin, timestamp, sessionID string) error {
 	return nil
 }
 
-func createWorkID(timestamp time.Time) string {
+func createID(timestamp time.Time) string {
 	kind := 0
 	size := 10
 	ikind, kinds, result := kind, [][]int{[]int{10, 48}, []int{26, 97}, []int{26, 65}}, make([]byte, size)

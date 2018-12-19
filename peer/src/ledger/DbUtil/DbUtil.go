@@ -4,7 +4,7 @@ package DbUtil
 import (
 	"database/sql"
 
-	_ "ledger/github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func DbInit() (s *sql.DB, err error) {

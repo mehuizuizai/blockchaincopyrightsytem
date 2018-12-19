@@ -9,7 +9,7 @@ import (
 type LoginReq struct {
 	UserName string
 	Password string
-	Flag     uint8
+	Flag     int
 }
 
 type LoginRes struct {
